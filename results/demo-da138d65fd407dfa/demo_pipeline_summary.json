@@ -1,0 +1,51 @@
+{
+  "run_id": "demo-da138d65fd407dfa",
+  "profile": "demo",
+  "stages": [
+    {
+      "stage": "0",
+      "name": "competence_pilot",
+      "exit_code": 0,
+      "status": "ok",
+      "seconds": 79.7462557
+    },
+    {
+      "stage": "1",
+      "name": "generate_frozen_tasks",
+      "exit_code": 0,
+      "status": "ok",
+      "seconds": 4.443574592999994
+    },
+    {
+      "stage": "2",
+      "name": "independent_validation",
+      "exit_code": 0,
+      "status": "ok",
+      "seconds": 1445.6960934089998
+    },
+    {
+      "stage": "3",
+      "name": "three_lenses_and_report",
+      "exit_code": 0,
+      "status": "ok",
+      "seconds": 88.66251087299997
+    }
+  ],
+  "all_ok": true,
+  "operationally_complete": true,
+  "scientific_validation": {
+    "status": "SUCCESS",
+    "checks": {
+      "competence_gate": true,
+      "representation_control_valid": true,
+      "nonzero_represented_cells": true,
+      "nonzero_causal_cells": true,
+      "nonzero_overlap_cells": true,
+      "causal_controls_valid": true,
+      "nondegenerate_causal_metrics": true,
+      "demo_success": true
+    }
+  },
+  "stage5_ran": false,
+  "stage6_ran": false
+}

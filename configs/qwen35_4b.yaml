@@ -1,0 +1,53 @@
+# ---------------------------------------------------------------------------
+# Asset configuration for the primary model and the released J/R lenses.
+#
+# Every profile config (smoke / core / full) inherits this file via `defaults`.
+# Revisions are left null here and RESOLVED AT RUNTIME to exact commit SHAs,
+# which are then pinned into the run manifest (see reproducibility.py).
+# ---------------------------------------------------------------------------
+
+model:
+  repo_id: "Qwen/Qwen3.5-4B"
+  revision: null                # resolved -> exact commit sha, pinned in manifest
+  dtype: "bfloat16"             # never quantized; A100 runs BF16
+  attn_implementation: null     # null -> transformers default
+  trust_remote_code: false
+  # Hard expectations. Loading fails loudly if the real model disagrees.
+  expected:
+    d_model: 2560
+    n_layers: 32
+    vocab_size: 248320
+    tie_word_embeddings: true
+
+lenses:
+  repo_id: "camilablank/workspace-lenses"
+  revision: null                # resolved -> exact commit sha, pinned in manifest
+  # Released lens artifacts. Both files carry the same schema:
+  #   {"J": {layer:int -> Tensor[d_model,d_model] fp16},
+  #    "n_prompts": int, "source_layers": [int], "d_model": int,
+  #    "provenance": {...}}
+  entries:
+    j_lens:
+      filename: "qwen3.5-4b/j-lens/lens.pt"
+      estimator: "standard"
+    r_lens:
+      filename: "qwen3.5-4b/r-lens/lens.pt"
+      estimator: "relp"
+  expected:
+    d_model: 2560
+    target_layer: 30            # J_l maps h_l -> h_30 (released provenance)
+    n_source_layers: 31
+    source_layer_min: 0
+    source_layer_max: 30
+    model_id: "Qwen/Qwen3.5-4B"
+
+# Fitting provenance of the released lenses. Stage-5 refits reproduce these
+# settings so that refit-vs-release comparisons are apples-to-apples.
+released_fit_provenance:
+  dataset_id: "NeelNanda/pile-10k"
+  target_layer: 30
+  t_max: 128
+  skip_first: 4
+  n_prompts: 25
+  weighting: "uniform"
+  corpus_mode: "pretrain"

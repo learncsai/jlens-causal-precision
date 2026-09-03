@@ -1,0 +1,19 @@
+{
+  "n_examples": 1544,
+  "n_chunks": 97,
+  "chunks_computed_this_run": 97,
+  "layers": [
+    0,
+    5,
+    10,
+    15,
+    20,
+    25,
+    30
+  ],
+  "positions": [
+    -1
+  ],
+  "cache_bytes": 38073988,
+  "root": "/content/drive/MyDrive/jlens_causal_precision_demo/runs/demo-da138d65fd407dfa/activations"
+}

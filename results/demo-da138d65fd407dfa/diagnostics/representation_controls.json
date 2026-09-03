@@ -1,0 +1,94 @@
+{
+  "rule": "per-variable: invalid only if all basic-positive cells are indistinguishable from the matched control",
+  "control_margin": 0.05,
+  "min_balanced_acc_margin": 0.1,
+  "valid": true,
+  "per_variable": {
+    "z1": {
+      "matched_control": "z1_control",
+      "n_basic_positive": 7,
+      "n_control_distinguishable": 7,
+      "n_ambiguous": 0,
+      "distinguishable_layers": [
+        0,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "ambiguous_layers": [],
+      "status": "ok",
+      "valid": true
+    },
+    "z2": {
+      "matched_control": "z2_control",
+      "n_basic_positive": 7,
+      "n_control_distinguishable": 7,
+      "n_ambiguous": 0,
+      "distinguishable_layers": [
+        0,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "ambiguous_layers": [],
+      "status": "ok",
+      "valid": true
+    },
+    "answer": {
+      "matched_control": "answer_control",
+      "n_basic_positive": 7,
+      "n_control_distinguishable": 3,
+      "n_ambiguous": 4,
+      "distinguishable_layers": [
+        20,
+        25,
+        30
+      ],
+      "ambiguous_layers": [
+        0,
+        5,
+        10,
+        15
+      ],
+      "status": "ok",
+      "valid": true
+    }
+  },
+  "ambiguous_cells": [
+    {
+      "variable_type": "answer",
+      "layer": 0,
+      "actual_bacc": 0.31920608884367957,
+      "control_bacc": 0.3222962768060227,
+      "gap": -0.003090187962343116
+    },
+    {
+      "variable_type": "answer",
+      "layer": 5,
+      "actual_bacc": 0.2343498492120316,
+      "control_bacc": 0.25860171666592763,
+      "gap": -0.024251867453896014
+    },
+    {
+      "variable_type": "answer",
+      "layer": 10,
+      "actual_bacc": 0.26865691479745474,
+      "control_bacc": 0.2669340313201376,
+      "gap": 0.0017228834773171386
+    },
+    {
+      "variable_type": "answer",
+      "layer": 15,
+      "actual_bacc": 0.293483329681719,
+      "control_bacc": 0.26228645077153523,
+      "gap": 0.031196878910183745
+    }
+  ],
+  "invalid_variables": []
+}

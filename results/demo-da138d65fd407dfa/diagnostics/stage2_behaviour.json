@@ -1,0 +1,7 @@
+{
+  "primary_base_accuracy": 0.93,
+  "accuracy_definition": "argmax over prompt-listed codeword choices",
+  "primary_base_full_vocabulary_accuracy_diagnostic": 0.925,
+  "n_primary_groups": 200,
+  "n_correct_primary_bases": 186
+}

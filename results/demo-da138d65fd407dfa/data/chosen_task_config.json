@@ -1,0 +1,9 @@
+{
+  "name": "path_worked_m3",
+  "modulus": 3,
+  "n_shots": 2,
+  "explicit_trace": true,
+  "task_kind": "lookup_chain",
+  "prompt_style": "minimal",
+  "ordered_tables": true
+}

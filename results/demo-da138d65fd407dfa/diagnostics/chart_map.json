@@ -1,0 +1,23 @@
+[
+  {
+    "figure": "Figure 1",
+    "question": "Do lens detections align with independent computation evidence across layers?",
+    "family": "ordered line + uncertainty",
+    "fields": "layer, representation gap, NME CI, top-1 recovery",
+    "palette": "hard two-root for z1/z2; explicit method line styles"
+  },
+  {
+    "figure": "Figure 2",
+    "question": "How do precision and recall trade off for representation and causality?",
+    "family": "precision-recall",
+    "fields": "score, R_X, RU_X, method",
+    "palette": "three restrained method colors plus line styles"
+  },
+  {
+    "figure": "Figure 3",
+    "question": "How does expected recovery differ from represented and causal precision?",
+    "family": "grouped bar with bootstrap intervals",
+    "fields": "method, expected/repr/causal top-1 precision, CI",
+    "palette": "three semantic roots with dark error bars"
+  }
+]

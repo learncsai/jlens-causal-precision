@@ -1,0 +1,274 @@
+{
+  "represented": [
+    [
+      "answer",
+      20
+    ],
+    [
+      "answer",
+      25
+    ],
+    [
+      "answer",
+      30
+    ],
+    [
+      "z1",
+      0
+    ],
+    [
+      "z1",
+      5
+    ],
+    [
+      "z1",
+      10
+    ],
+    [
+      "z1",
+      15
+    ],
+    [
+      "z1",
+      20
+    ],
+    [
+      "z1",
+      25
+    ],
+    [
+      "z1",
+      30
+    ],
+    [
+      "z2",
+      0
+    ],
+    [
+      "z2",
+      5
+    ],
+    [
+      "z2",
+      10
+    ],
+    [
+      "z2",
+      15
+    ],
+    [
+      "z2",
+      20
+    ],
+    [
+      "z2",
+      25
+    ],
+    [
+      "z2",
+      30
+    ]
+  ],
+  "causally_used": [
+    [
+      "answer",
+      25
+    ],
+    [
+      "answer",
+      30
+    ],
+    [
+      "z1",
+      20
+    ],
+    [
+      "z1",
+      25
+    ],
+    [
+      "z1",
+      30
+    ],
+    [
+      "z2",
+      20
+    ],
+    [
+      "z2",
+      25
+    ],
+    [
+      "z2",
+      30
+    ]
+  ],
+  "represented_and_causally_used": [
+    [
+      "answer",
+      25
+    ],
+    [
+      "answer",
+      30
+    ],
+    [
+      "z1",
+      20
+    ],
+    [
+      "z1",
+      25
+    ],
+    [
+      "z1",
+      30
+    ],
+    [
+      "z2",
+      20
+    ],
+    [
+      "z2",
+      25
+    ],
+    [
+      "z2",
+      30
+    ]
+  ],
+  "n_represented": 17,
+  "n_causally_used": 8,
+  "n_overlap": 8,
+  "representation_control_valid": true,
+  "representation_control_report": {
+    "rule": "per-variable: invalid only if all basic-positive cells are indistinguishable from the matched control",
+    "control_margin": 0.05,
+    "min_balanced_acc_margin": 0.1,
+    "valid": true,
+    "per_variable": {
+      "z1": {
+        "matched_control": "z1_control",
+        "n_basic_positive": 7,
+        "n_control_distinguishable": 7,
+        "n_ambiguous": 0,
+        "distinguishable_layers": [
+          0,
+          5,
+          10,
+          15,
+          20,
+          25,
+          30
+        ],
+        "ambiguous_layers": [],
+        "status": "ok",
+        "valid": true
+      },
+      "z2": {
+        "matched_control": "z2_control",
+        "n_basic_positive": 7,
+        "n_control_distinguishable": 7,
+        "n_ambiguous": 0,
+        "distinguishable_layers": [
+          0,
+          5,
+          10,
+          15,
+          20,
+          25,
+          30
+        ],
+        "ambiguous_layers": [],
+        "status": "ok",
+        "valid": true
+      },
+      "answer": {
+        "matched_control": "answer_control",
+        "n_basic_positive": 7,
+        "n_control_distinguishable": 3,
+        "n_ambiguous": 4,
+        "distinguishable_layers": [
+          20,
+          25,
+          30
+        ],
+        "ambiguous_layers": [
+          0,
+          5,
+          10,
+          15
+        ],
+        "status": "ok",
+        "valid": true
+      }
+    },
+    "ambiguous_cells": [
+      {
+        "variable_type": "answer",
+        "layer": 0,
+        "actual_bacc": 0.31920608884367957,
+        "control_bacc": 0.3222962768060227,
+        "gap": -0.003090187962343116
+      },
+      {
+        "variable_type": "answer",
+        "layer": 5,
+        "actual_bacc": 0.2343498492120316,
+        "control_bacc": 0.25860171666592763,
+        "gap": -0.024251867453896014
+      },
+      {
+        "variable_type": "answer",
+        "layer": 10,
+        "actual_bacc": 0.26865691479745474,
+        "control_bacc": 0.2669340313201376,
+        "gap": 0.0017228834773171386
+      },
+      {
+        "variable_type": "answer",
+        "layer": 15,
+        "actual_bacc": 0.293483329681719,
+        "control_bacc": 0.26228645077153523,
+        "gap": 0.031196878910183745
+      }
+    ],
+    "invalid_variables": []
+  },
+  "causal_controls_valid": true,
+  "task_accuracy": 0.93,
+  "competence_pair_counts": {
+    "cf_decoy": 179,
+    "cf_self": 186,
+    "cf_y": 185,
+    "cf_z1": 176,
+    "cf_z2": 175
+  },
+  "layers": [
+    0,
+    5,
+    10,
+    15,
+    20,
+    25,
+    30
+  ],
+  "position": -1,
+  "criteria": {
+    "representation": {
+      "probe_margin": 0.1,
+      "permutation_quantile": 0.95,
+      "matched_control_margin": 0.05
+    },
+    "causal": {
+      "min_pairs": 20,
+      "min_mean_nme": 0.3,
+      "min_nme_ci_lower": 0.1,
+      "require_correct_base_and_donor": true,
+      "controls": {
+        "identity_min_preservation": 0.99,
+        "decoy_margin_over_informative": 0.0
+      }
+    }
+  }
+}

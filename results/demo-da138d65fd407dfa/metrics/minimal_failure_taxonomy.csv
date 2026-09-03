@@ -1,0 +1,16 @@
+lens_name,failure_category,count,share
+j_lens,final answer,636,0.15474452554744525
+j_lens,future z2,512,0.1245742092457421
+j_lens,previous z1,343,0.08345498783454988
+j_lens,prompt-present/unused,1271,0.3092457420924574
+j_lens,random/other,1348,0.32798053527980536
+logit_lens,final answer,598,0.14437469821342347
+logit_lens,future z2,428,0.10333172380492515
+logit_lens,previous z1,265,0.06397875422501208
+logit_lens,prompt-present/unused,1077,0.26001931434089814
+logit_lens,random/other,1774,0.4282955094157412
+r_lens,final answer,581,0.14129377431906615
+r_lens,future z2,504,0.122568093385214
+r_lens,previous z1,353,0.08584630350194553
+r_lens,prompt-present/unused,1305,0.31736381322957197
+r_lens,random/other,1369,0.3329280155642023

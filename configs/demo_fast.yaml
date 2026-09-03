@@ -1,0 +1,19 @@
+# Runtime-reduced variant of DEMO. Scientific rules are identical to demo.yaml.
+defaults: ["demo.yaml"]
+
+run:
+  profile: "demo_fast"
+  description: "Fast competence-gated demo with 100 primary groups."
+
+tasks:
+  primary_groups: 100
+  n_groups_per_family: 100
+  control_groups: 12
+
+demo:
+  competence:
+    development_groups_per_seed: 40
+    confirmation_groups: 100
+
+representation:
+  n_permutations: 30

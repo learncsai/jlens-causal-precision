@@ -1,0 +1,200 @@
+# ---------------------------------------------------------------------------
+# Shared experiment defaults. Profiles override only what differs; nothing here
+# is a "full-scale" number, so a profile can never silently inherit an
+# expensive count it did not ask for (see tests/test_metrics.py::profile tests
+# and scripts/verify_run.py).
+# ---------------------------------------------------------------------------
+
+defaults: ["qwen35_4b.yaml"]
+
+run:
+  profile: "base"
+  run_id: null                  # auto: "<profile>-<config hash>" (deterministic/resumable)
+  description: ""
+
+seeds:
+  task: 20260830
+  probe: 11
+  bootstrap: 22
+  fit: 33
+  patching: 44
+
+paths:
+  # All null -> repo-local ./runs, ./results, ./hf_cache. The notebook keeps
+  # this local default and can optionally override the persistent root to Drive.
+  source_root: null
+  run_root: null
+  result_root: null
+  checkpoint_root: null
+  hf_cache: null
+
+# ---------------------------------------------------------------------------
+# STAGE 1 - controlled latent-variable tasks
+# ---------------------------------------------------------------------------
+tasks:
+  families: ["modular_lookup", "two_step", "permutation", "null_lookup"]
+  n_groups_per_family: 8        # a "group" = 1 base problem + its matched donors
+  modulus: 7                    # |value alphabet| actually used
+  n_shots: 3                    # worked demonstrations, shared within a group
+  n_absent_codewords: 4         # codewords that never appear in the prompt
+  n_random_candidates: 2        # out-of-range digit controls per example
+  max_resample_attempts: 400
+  # Fractions are over GROUPS, never over individual examples.
+  splits: { train: 0.5, val: 0.2, test: 0.3 }
+  # Held-out template/codebook combinations so probes cannot memorise problems.
+  holdout_template_fraction: 0.25
+
+# ---------------------------------------------------------------------------
+# STAGE 2 - activations, representation probes, causal patching
+# ---------------------------------------------------------------------------
+activations:
+  layers: "all"                 # "all" -> lens source_layers; or explicit list
+  # The final prompt position is primary. ``last-1`` is cached only so Stage 2
+  # can run the preregistered neighbouring-position patch control.
+  positions: ["last", "last-1"]
+  store_dtype: "float16"
+  batch_size: 8
+
+representation:
+  variables: ["z1", "z2", "answer"]
+  probe:
+    type: "logistic"            # multinomial logistic regression
+    C_grid: [0.003, 0.01, 0.03, 0.1, 0.3, 1.0]
+    max_iter: 2000
+    standardize: true
+    # Fit in an orthonormal basis of the centred TRAIN activations. Exact for
+    # L2-regularised logistic regression (the optimum lies in that span), and it
+    # cuts the L-BFGS parameter count from n_classes*2560 to n_classes*(n_train-1),
+    # which is the difference between minutes and an hour for this stage.
+    project_to_train_span: true
+  n_permutations: 50
+  # PREREGISTERED representational-validation rule (see representation.py).
+  criterion:
+    min_balanced_acc_margin: 0.10   # test balanced acc >= chance + margin
+    permutation_quantile: 0.95      # AND > this quantile of the permutation null
+  sensitivity_margins: [0.02, 0.05, 0.10, 0.20, 0.30]
+
+causal:
+  donor_types: ["cf_z1", "cf_z2", "cf_y", "cf_decoy", "cf_unrelated", "cf_self"]
+  batch_size: 16
+  chunk_layers: 8               # checkpoint granularity
+  # PREREGISTERED causal-use rule (see causal_metrics.py).
+  criterion:
+    # "normalized" divides interchange accuracy by the ceiling the model itself
+    # imposes (its accuracy on the donor prompt). Patching the full donor state
+    # can at best reproduce the donor's own behaviour, so a model that answers
+    # the donor correctly 25% of the time cannot exceed IIA=0.25 however
+    # perfect the intervention is; an absolute bar would then be measuring
+    # competence, not causal use. Set "raw" for the unnormalized quantity;
+    # BOTH are always swept in metrics/sensitivity_causal.csv.
+    # The prompt preregisters raw full-vocabulary IIA. Donor-accuracy-normalized
+    # IIA remains a reported sensitivity analysis, not the primary U_X rule.
+    iia_mode: "raw"
+    min_iia: 0.30
+    min_mean_nme: 0.30
+    require_bootstrap_ci_above: 0.0
+  sensitivity:
+    iia: [0.10, 0.20, 0.30, 0.50, 0.70]
+    nme: [0.10, 0.20, 0.30, 0.50, 0.70]
+
+# ---------------------------------------------------------------------------
+# STAGE 3/4 - lens scoring, metrics, abstention
+# ---------------------------------------------------------------------------
+readout:
+  methods: ["logit_lens", "j_lens", "r_lens"]
+  # PRIMARY score. Raw logits are always stored, but they are not comparable
+  # across candidate universes (numeric values vs answer codewords sit at
+  # different points of the unigram-frequency distribution), so the primary
+  # score is standardized within (example, layer, method, universe).
+  score: "normalized_score"
+  alternative_scores: ["raw_score", "margin_to_best_distractor", "candidate_softmax"]
+  # Only these splits enter the event table. TRAIN is excluded on purpose: it
+  # trained the Stage-2 probes. VAL selects thresholds/calibration, TEST carries
+  # every reported number.
+  event_splits: ["val", "test"]
+  compute_vocab_rank: true
+  vocab_rank_chunk: 32768
+  score_batch_size: 32
+
+metrics:
+  bootstrap:
+    n_replicates: 200
+    unit: "group_id"            # NEVER individual events
+  precision_targets: [0.80, 0.90, 0.95]
+  coverage_targets: [0.05, 0.10, 0.25, 0.50]
+  topk: [1, 5, 10]
+  calibration:
+    method: "logistic"          # fit on VALIDATION split only
+    feature: "normalized_score"
+    enabled: true
+
+# ---------------------------------------------------------------------------
+# STAGE 5 - independent lens refits (expensive)
+# ---------------------------------------------------------------------------
+refit:
+  enabled: false
+  # {n_prompts: n_independent_fits}
+  j_lens: { 25: 2 }
+  r_lens: { 25: 2 }
+  dim_batch: 8
+  max_seq_len: 128
+  skip_first: 4
+  target_layer: 30
+  source_layers: null           # null -> 0..target_layer
+  corpus:
+    dataset_id: "NeelNanda/pile-10k"
+    split: "train"
+    # Fitting prompts are drawn from a disjoint index range from every
+    # evaluation and baseline-training prompt (asserted at runtime).
+    offset: 0
+  rlens:
+    # No official RelP adapter currently establishes the released R-Lens
+    # backward rules for Qwen3.5's hybrid linear-attention blocks. The prompt's
+    # guardrail requires an explicit failure, not an invented approximation.
+    # ``experimental_local`` remains available for method-development only and
+    # is always gated against the released lens; it is not a paper result.
+    implementation: "official_required"
+    rules:
+      ln_rule: true
+      identity_rule: true
+      half_rule: true
+      half_rule_beta: 0.5
+      include_qk_norms: false
+      gated_norms: false
+    # Refit R-Lens must reproduce the RELEASED n=25 R-Lens above this bar or
+    # the R-refit is reported as FAILED (never silently replaced by grads).
+    validation:
+      enabled: true
+      min_mean_layer_cosine: 0.90
+      min_mean_layer_cka: 0.90
+
+# ---------------------------------------------------------------------------
+# STAGE 6 - same-objective baselines
+# ---------------------------------------------------------------------------
+baselines:
+  methods: ["logit_lens", "regression_zero_bias", "regression_affine", "regression_whitened", "tuned_lens"]
+  corpus:
+    dataset_id: "NeelNanda/pile-10k"
+    split: "train"
+    n_train_prompts: 32
+    n_val_prompts: 8
+    max_seq_len: 128
+    skip_first: 4
+    offset: 4000                # disjoint from the FULL J+R refit range [0,2850)
+  ridge_lambdas: [1.0e-2, 1.0e-1, 1.0, 10.0, 100.0, 1000.0]
+  whitening:
+    shrinkage: 0.05             # ridge-whitening: (1-s)*Sigma + s*tr(Sigma)/d * I
+  tuned_lens:
+    steps: 200
+    lr: 1.0e-3
+    batch_tokens: 64
+    weight_decay: 0.0
+
+figures:
+  dpi: 300
+  formats: ["pdf", "png"]
+
+bundle:
+  include_source_snapshot: true
+  include_event_table: true
+  max_event_table_mb: 512

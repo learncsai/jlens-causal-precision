@@ -1,0 +1,18 @@
+# Minimum compatible runtime requirements. The exact versions resolved for a
+# paper run are recorded in its manifest/environment snapshot. The scientific
+# J-Lens implementation itself is pinned to an exact source commit below.
+torch>=2.4
+transformers>=5.5
+huggingface_hub>=0.26
+safetensors>=0.4
+accelerate>=0.34
+numpy>=1.26
+pandas>=2.1
+pyarrow>=15
+scipy>=1.11
+scikit-learn>=1.4
+matplotlib>=3.8
+PyYAML>=6.0
+tqdm>=4.66
+# Official Jacobian-lens reference implementation pinned to an exact commit.
+jlens @ git+https://github.com/anthropics/jacobian-lens@581d398613e5602a5af361e1c34d3a92ea82ba8e

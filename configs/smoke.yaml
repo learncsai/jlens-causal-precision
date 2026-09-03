@@ -1,0 +1,52 @@
+# ---------------------------------------------------------------------------
+# SMOKE: verify the complete software path end-to-end as fast as possible.
+# Every count here is deliberately tiny. Stage 5 refits are HARD-DISABLED.
+# ---------------------------------------------------------------------------
+defaults: ["_base.yaml"]
+
+run:
+  profile: "smoke"
+  description: "Tiny end-to-end validation of the full pipeline."
+
+tasks:
+  families: ["modular_lookup", "two_step", "permutation", "null_lookup"]
+  n_groups_per_family: 6        # -> ~24 groups, ~120 examples
+  modulus: 5
+
+activations:
+  layers: [4, 12, 20, 28]       # small layer subset
+  positions: ["last", "last-1"]
+
+representation:
+  n_permutations: 10
+  probe:
+    C_grid: [0.03, 0.3]
+
+causal:
+  donor_types: ["cf_z1", "cf_z2", "cf_y", "cf_decoy", "cf_unrelated", "cf_self"]
+  batch_size: 4
+  chunk_layers: 4
+
+readout:
+  methods: ["logit_lens", "j_lens", "r_lens"]
+  compute_vocab_rank: true
+
+metrics:
+  bootstrap:
+    n_replicates: 50
+
+refit:
+  enabled: false                # smoke NEVER refits
+  j_lens: {}
+  r_lens: {}
+
+baselines:
+  methods: ["logit_lens", "regression_zero_bias", "regression_affine"]
+  corpus:
+    n_train_prompts: 4
+    n_val_prompts: 2
+    max_seq_len: 64
+  ridge_lambdas: [1.0, 100.0]
+  tuned_lens:
+    steps: 20
+    batch_tokens: 256

@@ -1,0 +1,36 @@
+{
+  "chosen_task_config": {
+    "name": "path_worked_m3",
+    "modulus": 3,
+    "n_shots": 2,
+    "explicit_trace": true,
+    "task_kind": "lookup_chain",
+    "prompt_style": "minimal",
+    "ordered_tables": true
+  },
+  "independent_confirmation_accuracy": 0.94,
+  "final_task_verified_accuracy": 0.925,
+  "confirmed_primary_task_digest": "e890aa3ba65f205a324bec8fc58e2fed72f42958e338453588166cf25b49d85c",
+  "regenerated_primary_task_digest": "e890aa3ba65f205a324bec8fc58e2fed72f42958e338453588166cf25b49d85c",
+  "n_groups": 224,
+  "n_primary_groups": 200,
+  "n_control_groups": 24,
+  "n_problems": 1544,
+  "families": {
+    "demo_two_step": 200,
+    "null_lookup": 24
+  },
+  "splits": {
+    "val": 44,
+    "test": 68,
+    "train": 112
+  },
+  "primary_split_counts": {
+    "val": 40,
+    "test": 60,
+    "train": 100
+  },
+  "control_moduli": [
+    3
+  ]
+}

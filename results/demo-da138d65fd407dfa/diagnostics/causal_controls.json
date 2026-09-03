@@ -1,0 +1,48 @@
+{
+  "criterion": "answer preservation under control patches",
+  "identity_min_preservation": 0.99,
+  "decoy_margin_over_informative": 0.0,
+  "note": "cf_self and cf_decoy share the base answer, so the donor-vs-base logit contrast is identically zero for them and cannot be used as a control; answer preservation is used instead",
+  "informative": {
+    "roles": [
+      "cf_z1",
+      "cf_z2",
+      "cf_y"
+    ],
+    "n_events": 3752,
+    "answer_preservation": 0.6263326226012793,
+    "answer_movement": 0.3736673773987207
+  },
+  "cf_self": {
+    "n_events": 1302,
+    "available": true,
+    "answer_preservation": 1.0,
+    "rule": "identity patch: preservation >= 0.99",
+    "ok": true
+  },
+  "cf_decoy": {
+    "n_events": 1253,
+    "available": true,
+    "answer_preservation": 0.9984038308060654,
+    "rule": "decoy preservation >= informative preservation + margin",
+    "threshold": 0.6263326226012793,
+    "ok": true
+  },
+  "n_checks_performed": 2,
+  "valid": true,
+  "available": true,
+  "degenerate_shift_diagnostic": {
+    "informative_denominator_scale": 5.125,
+    "why_degenerate": "y_donor == y_base for these roles, so b_base, b_donor and b_patched are all exactly zero; these numbers cannot fail and are reported only for continuity with earlier runs",
+    "cf_self": {
+      "n_events": 1302,
+      "max_abs_shift": 0.0,
+      "max_abs_shift_relative": 0.0
+    },
+    "cf_decoy": {
+      "n_events": 1253,
+      "max_abs_shift": 0.0,
+      "max_abs_shift_relative": 0.0
+    }
+  }
+}

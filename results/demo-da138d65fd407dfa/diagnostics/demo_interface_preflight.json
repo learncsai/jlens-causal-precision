@@ -1,0 +1,57 @@
+{
+  "n_examples": 4,
+  "direct_answer_rate": 1.0,
+  "choice_accuracy_not_a_gate": 1.0,
+  "full_vocabulary_accuracy_not_a_gate": 1.0,
+  "predictions": [
+    {
+      "example_id": "demo_two_step-00000:base",
+      "predicted_token_id": 436,
+      "predicted_token_text": " L",
+      "vocab_argmax_token_id": 436,
+      "vocab_argmax_token_text": " L",
+      "answer_token_id": 436,
+      "answer_token_text": " L",
+      "correct": true,
+      "vocab_argmax_correct": true,
+      "vocab_argmax_is_allowed_choice": true
+    },
+    {
+      "example_id": "demo_two_step-00001:base",
+      "predicted_token_id": 426,
+      "predicted_token_text": " F",
+      "vocab_argmax_token_id": 426,
+      "vocab_argmax_token_text": " F",
+      "answer_token_id": 426,
+      "answer_token_text": " F",
+      "correct": true,
+      "vocab_argmax_correct": true,
+      "vocab_argmax_is_allowed_choice": true
+    },
+    {
+      "example_id": "demo_two_step-00002:base",
+      "predicted_token_id": 417,
+      "predicted_token_text": " B",
+      "vocab_argmax_token_id": 417,
+      "vocab_argmax_token_text": " B",
+      "answer_token_id": 417,
+      "answer_token_text": " B",
+      "correct": true,
+      "vocab_argmax_correct": true,
+      "vocab_argmax_is_allowed_choice": true
+    },
+    {
+      "example_id": "demo_two_step-00003:base",
+      "predicted_token_id": 604,
+      "predicted_token_text": " J",
+      "vocab_argmax_token_id": 604,
+      "vocab_argmax_token_text": " J",
+      "answer_token_id": 604,
+      "answer_token_text": " J",
+      "correct": true,
+      "vocab_argmax_correct": true,
+      "vocab_argmax_is_allowed_choice": true
+    }
+  ],
+  "passed": true
+}

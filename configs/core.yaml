@@ -1,0 +1,53 @@
+# ---------------------------------------------------------------------------
+# CORE: released J/R lenses, Stages 1-4 in full plus the inexpensive parts of
+# Stage 6. No lens refitting.
+# ---------------------------------------------------------------------------
+defaults: ["_base.yaml"]
+
+run:
+  profile: "core"
+  description: "Released J/R lenses; Stages 1-4 + inexpensive Stage 6 baselines."
+
+tasks:
+  families: ["modular_lookup", "two_step", "permutation", "null_lookup"]
+  n_groups_per_family: 90       # ~360 groups, ~1800 examples
+  modulus: 7
+
+activations:
+  layers: "all"
+  positions: ["last", "last-1"]
+  batch_size: 16
+
+representation:
+  n_permutations: 50
+
+causal:
+  batch_size: 24
+  chunk_layers: 8
+  donor_types: ["cf_z1", "cf_z2", "cf_y", "cf_decoy", "cf_unrelated", "cf_self"]
+
+readout:
+  methods: ["logit_lens", "j_lens", "r_lens"]
+
+metrics:
+  bootstrap:
+    n_replicates: 2000
+
+refit:
+  enabled: false
+  j_lens: {}
+  r_lens: {}
+
+baselines:
+  # CORE intentionally runs only the closed-form Stage-6 baselines. The
+  # full-vocabulary KL tuned lens is publication-profile work, not inexpensive.
+  methods: ["logit_lens", "regression_zero_bias", "regression_affine", "regression_whitened"]
+  corpus:
+    n_train_prompts: 96
+    n_val_prompts: 24
+    max_seq_len: 128
+  tuned_lens:
+    steps: 400
+    # Full-vocabulary KL materialises a [batch,vocab] tensor. 128 is safe on
+    # both 40GB and 80GB A100s; 4096 was a predictable 40GB OOM.
+    batch_tokens: 128

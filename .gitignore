@@ -1,0 +1,67 @@
+# ---------------------------------------------------------------------------
+# Artifacts that must never enter version control.
+# Model weights, lens tensors, activation caches and run outputs are large and
+# are regenerated / re-downloaded at runtime.
+# ---------------------------------------------------------------------------
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Hugging Face / torch caches and any downloaded weights
+hf_cache/
+.hf_cache/
+*.safetensors
+*.bin
+*.gguf
+lens.pt
+*lens*.pt
+*.ckpt
+*.pth
+
+# Run artifacts
+runs/
+results/**
+!results/.gitkeep
+artifacts/
+checkpoints/
+paper_bundle/
+output/
+paper/
+*.zip
+
+# Large data
+*.parquet
+*.npz
+*.npy
+*.feather
+*.arrow
+
+# Keep the compact, canonical result. Future runs remain ignored unless they
+# are deliberately added here.
+!results/demo-da138d65fd407dfa/
+!results/demo-da138d65fd407dfa/**
+
+# Local scratch
+scratch/
+tmp/
+_local*/
+*.log
+
+# LaTeX build intermediates outside the ignored local paper directory
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz

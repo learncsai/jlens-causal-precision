@@ -1,0 +1,26 @@
+{
+  "methods": [
+    "j_lens",
+    "r_lens",
+    "logit_lens"
+  ],
+  "n_events": 70560,
+  "n_groups": 60,
+  "validation": {
+    "competence_gate": true,
+    "representation_control_valid": true,
+    "nonzero_represented_cells": true,
+    "nonzero_causal_cells": true,
+    "nonzero_overlap_cells": true,
+    "causal_controls_valid": true,
+    "nondegenerate_causal_metrics": true,
+    "demo_success": true
+  },
+  "report": "/content/drive/MyDrive/jlens_causal_precision_demo/results/demo-da138d65fd407dfa/DEMO_REPORT.md",
+  "figures": [
+    "figure1_layerwise_computation.png",
+    "figure2_precision_recall.png",
+    "figure3_central_summary.png"
+  ],
+  "table": "table1_demo_results.csv"
+}

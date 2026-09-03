@@ -1,0 +1,62 @@
+# ---------------------------------------------------------------------------
+# FULL: publication-scale. All six stages, including the expensive Stage-5
+# J-Lens refit matrix (5x n=25, 3x n=100, 1x n=1000). The configured
+# R matrix is recorded as unavailable unless an explicit experimental adapter
+# is requested; it is never silently treated as a paper result.
+#
+# COST WARNING: the J refit matrix is ~1425 fitted prompts and is
+# dominated by the model's own backward pass. experiments/stage5_refit_stability.py
+# prints a runtime estimate before it starts and checkpoints every prompt.
+# ---------------------------------------------------------------------------
+defaults: ["_base.yaml"]
+
+run:
+  profile: "full"
+  description: "Publication-scale run: all six stages including lens refits."
+
+tasks:
+  families: ["modular_lookup", "two_step", "permutation", "null_lookup"]
+  n_groups_per_family: 300      # ~1200 groups, ~6000 examples
+  modulus: 7
+
+activations:
+  layers: "all"
+  positions: ["last", "last-1"]
+  batch_size: 16
+
+representation:
+  n_permutations: 200
+
+causal:
+  batch_size: 24
+  chunk_layers: 8
+  donor_types: ["cf_z1", "cf_z2", "cf_y", "cf_decoy", "cf_unrelated", "cf_self"]
+
+readout:
+  methods: ["logit_lens", "j_lens", "r_lens"]
+
+metrics:
+  bootstrap:
+    n_replicates: 2000
+
+refit:
+  enabled: true
+  j_lens: { 25: 5, 100: 3, 1000: 1 }
+  r_lens: { 25: 5, 100: 3, 1000: 1 }
+  dim_batch: 16                 # raise to 32 on an 80GB A100
+  max_seq_len: 128
+  skip_first: 4
+  target_layer: 30
+
+baselines:
+  methods: ["logit_lens", "regression_zero_bias", "regression_affine", "regression_whitened", "tuned_lens"]
+  corpus:
+    n_train_prompts: 256
+    n_val_prompts: 64
+    max_seq_len: 128
+    offset: 4000
+  tuned_lens:
+    # Full-vocabulary KL is compute-bound. These are per-layer updates; a
+    # small token batch is the practical standard-objective budget on A100.
+    steps: 500
+    batch_tokens: 32
